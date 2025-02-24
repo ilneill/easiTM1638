@@ -8,7 +8,7 @@
  * (c) Ian Neill 2025
  * GPL(v3) Licence
  *
- * Built on my TM1637 library, and work by Gavin Lyon and Handson Technology.
+ * Built on my TM1637 library, and work by Gavin Lyons and Handson Technology.
  * References:
  *    https://github.com/gavinlyonsrepo/TM1638plus
  *    https://www.handsontec.com/dataspecs/display/TM1638.pdf

@@ -271,6 +271,9 @@ Is there anything? Let me know if you find a problem or think of any improvement
 My TM1637 Arduino library that this TM1638 library was built on:
  * https://github.com/ilneill/easiTM1637
 
+A good Maker Tutorial:
+* https://www.makerguides.com/connecting-arduino-uno-with-tm1638-7-segment-led-driver/
+
 Really helpful guide documents:
 * https://www.handsontec.com/dataspecs/display/TM1638.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Tutorial.pdf)
 * https://jetpackacademy.com/wp-content/uploads/2018/06/TM1638_cheat_sheet_download.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Cheatsheet.pdf)
