@@ -245,8 +245,9 @@ The image below shows a relatively common 8-digit TM1638 based 7-segment LED dis
 | An 8-Digit "LED&KEY" TM1638 Based Display Module |
 |-------|
 | ![TM1638 Module](images/TM1638-Module.jpg) |
-| ![TM1638 Circuit](images/TM1638-Module_Circuit_Compact.png) | ![TM1638 Module](images/TM1638-Module_Components.jpg) |
-| ![TM1638 Circuit](images/TM1638-Module_Circuit_Diagram.png) |
+| ![TM1638 Circuit1](images/TM1638-Module_Circuit_Compact.png) |
+| ![TM1638 Layout](images/TM1638-Module_Components.jpg) |
+| ![TM1638 Circuit2](images/TM1638-Module_Circuit_Diagram.png) |
 
 
 ## Example Hardware Build
