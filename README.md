@@ -245,6 +245,7 @@ The image below shows a relatively common 8-digit TM1638 based 7-segment LED dis
 | An 8-Digit "LED&KEY" TM1638 Based Display Module |
 |-------|
 | ![TM1638 Module](images/TM1638-Module.jpg) |
+| ![TM1638 Circuit](images/TM1638-Module_Circuit_Compact.png) | ![TM1638 Module](images/TM1638-Module_Components.jpg) |
 | ![TM1638 Circuit](images/TM1638-Module_Circuit_Diagram.png) |
 
 
@@ -270,15 +271,15 @@ My TM1637 Arduino library that this TM1638 library was built on:
  * https://github.com/ilneill/easiTM1637
 
 Really helpful guide documents:
-* https://www.handsontec.com/dataspecs/display/TM1638.pdf [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Tutorial.pdf)
-* https://jetpackacademy.com/wp-content/uploads/2018/06/TM1638_cheat_sheet_download.pdf [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Cheatsheet.pdf)
+* https://www.handsontec.com/dataspecs/display/TM1638.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Tutorial.pdf)
+* https://jetpackacademy.com/wp-content/uploads/2018/06/TM1638_cheat_sheet_download.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Cheatsheet.pdf)
 
 The TM1638 Datasheet:
-* [Titan Micro datasheet - TM1638](https://www.makerhero.com/img/files/download/TM1638-Datasheet.pdf) [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Datasheet.pdf)
+* [Titan Micro datasheet - TM1638](https://www.makerhero.com/img/files/download/TM1638-Datasheet.pdf) - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638-Datasheet.pdf)
 
 Other Versions of the Datasheet:
-* https://thilaire.github.io/missionBoard/datasheet/TM1638en.pdf [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638en-Datasheet.pdf)
-* https://futuranet.it/futurashop/image/catalog/data/Download/TM1638_V1.3_EN.pdf [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638_V1.3_EN-Datasheet.pdf)
+* https://thilaire.github.io/missionBoard/datasheet/TM1638en.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638en-Datasheet.pdf)
+* https://futuranet.it/futurashop/image/catalog/data/Download/TM1638_V1.3_EN.pdf - [Repo Copy](https://github.com/ilneill/easiTM1638/datasheets/TM1638_V1.3_EN-Datasheet.pdf)
 
 And the **GOTO** Guide for Markdown Syntax:
 * https://www.markdownguide.org/cheat-sheet/
