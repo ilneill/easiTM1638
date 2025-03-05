@@ -78,12 +78,12 @@ __void displayBrightness(uint8_t brightness = 2);__
 * Set the brightness (0x00 - 0x07) and turn the TM1638 display ON. Returns nothing.
 
 __void displayTest(bool dispTest = false);__
-* Turn ON/OFF Display Test mode. True turns ON all LEDs and digit segments (+dps). False restores their previous values. Returns nothing.
+* Turn ON/OFF display test mode. True turns ON all LEDs and digit segments (+dps). False restores their previous values. Returns nothing.
 
 __void displayBin8(uint8_t number, bool lsbFirst = false);__
 * Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB. Returns nothing.
 
-__void displayChar(uint8_t digit, uint8_t number, bool raw  = false);__
+__void displayChar(uint8_t digit, uint8_t number, bool raw = false);__
 * Display a character in a specific LED digit. Returns nothing.
 
 __void displayInt8(uint8_t digit, uint8_t number, bool useDec = true);__
@@ -120,7 +120,7 @@ The TM1638 uses addresses and enable lines (GRID1-GRID8) to uniquely identify an
 * Logical digit 6 = Address 0x0C
 * Logical digit 7 = Address 0x0E
 
-The TM1638 chip supports 2 addressing modes but only the fixed address mode is used by the library.
+The TM1638 chip supports 2 addressing modes but only the fixed address mode is supported by the library. Note that the auto incrementing address mode is used by the display testing method (it made sense for that purpose), but this is under the bonnet so is not readily visible to the user.
 
 #### Fixed
 Only this addressing mode is used because the TM1638 digit addressing is not in incrementing sequential order.
