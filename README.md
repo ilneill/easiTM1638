@@ -4,7 +4,7 @@ This is a very simple Arduino Library to control the TM1638 (up to) 8-digit (+ d
 
 ![A Common TM1638 Module](images/TM1638-Front.jpg)
 
-The TM1638 is a small IC that can control up to eight 7-segment LED display digits, each with an individually controllable decimal point. It also has a keyboard scan interface, and that feature is supported by this library for up to 8 buttons. Additionally, using extra "segment" control pins, this library supports up to 8 individully controllable LEDs. The TM1638 uses a 3-wire serial interface that appears similar to, but is simpler than, the SPI bus.
+The TM1638 is a small IC that can control up to eight 7-segment LED display digits, each with an individually controllable decimal point. It also has a keyboard scan interface, and that feature is supported by this library for up to 8 buttons. Additionally, using extra "segment" control pins, this library supports up to 8 individully controllable LEDs. The TM1638 uses a 3-wire serial interface that appears similar to, but is simpler than (and incompatible with), the SPI bus.
 
 
 ## Why... Why Indeed?
@@ -13,7 +13,7 @@ Another project I am working on (A Kim-1 Mega Emulator) has a lot of rabbit hole
 
 One such rabbit hole is trying and testing libraries and hardware for some keypad input and LED/LCD output. I am mostly testing on an Arduino Mini Pro (it was what I had to hand), but I am also using an Arduino Mega (it was beside the Mini Pro). After a lot of research, none of the existing TM1638 libraries were ticking all the boxes for what I wanted to achieve, and how I wanted to achieve it. So, I decided to write my own library for the TM1638, doing exactly what I wanted, how I wanted it to be done, keeping it simple and without any unnecessary "features".
 
-So far, the "LED&KEY" TM1638 based module has easily been my favourite, and I am likely going to use it in my Kim-1 Mega Emulator project.
+So far, the "LED&KEY" TM1638 based module has easily been my favourite, and I am definitely going to use it in my Kim-1 Mega Emulator project.
 
 
 ## Contents
@@ -34,7 +34,7 @@ This library uses Arduino shiftIn/shiftOut functions for the serial communicatio
 
 * Supports 7-Segment LED displays of up to 8 digits (+dps) using the TM1638.
 * Supports up to 8 LEDs and 8 buttons, as found on the "LED&KEY" TM1638 based module.
-* Uses only the fixed addressing modes of the TM1638 chip.
+* Primarily uses only the fixed addressing mode of the TM1638 chip.
 * Has functions to easily display defined characters and 8, 12 and 16 bit numbers in decimal or hex digits.
 * Has functions to easily write to the LEDs and read the buttons of the "LED&KEY" TM1638 based module.
 
@@ -78,7 +78,7 @@ __void displayBrightness(uint8_t brightness = 2);__
 * Set the brightness (0x00 - 0x07) and turn the TM1638 display ON. Returns nothing.
 
 __void displayTest(bool dispTest = false);__
-* Turn ON/OFF display test mode. True turns ON all LEDs and digit segments (+dps). False restores their previous values. Returns nothing.
+* Test all the display LEDs and segments (+dps). True turns ON all LEDs and digit segments (+dps). False restores their previous values. Returns nothing.
 
 __void displayBin8(uint8_t number, bool lsbFirst = false);__
 * Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB. Returns nothing.
