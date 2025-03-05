@@ -6,6 +6,7 @@
  * GPL(v3) Licence
  *
  * Built on my TM1637 library demo for the TM1637 based LED module.
+ * ... with some developments backported into this TM1638 demo from my MAX7219 demo.
  *
  * ****************************
  * *  easiTM1638 Demo Sketch  *
@@ -31,7 +32,7 @@
 #define STBPIN      4                                     // Strobe.
 #define LEDPIN      13                                    // The builtin LED.
 
-// The number of LEDs, Digits and Buttons in the TM1638 based LED display.
+// The number of LEDs, digits and buttons in the TM1638 based LED display.
 #define NUMLEDS     8
 #define NUMDIGITS   8
 #define NUMBUTTONS  8
@@ -55,7 +56,7 @@ void setup() {
   //myDisplay.begin(tmDigitMap, NUMBUTTONS, NUMLEDS, NUMDIGITS, INTENSITY_TYP);
   Serial.println(FLASHSTR("\nDisplay physical to logical mapping test."));
   findDigitMap();
-  Serial.println(FLASHSTR("\nDisplay brightness and LED/digit/button test."));
+  Serial.println(FLASHSTR("\nDisplay brightness and LED/digit/button tests."));
   testDisplay();
   blinkLED(100);
   delay(1000);
@@ -146,7 +147,7 @@ void findDigitMap() {
       delay(100);
     }
   }
-  // Clear the display as we leave the digit mapping function.
+  // Ensure we clear the display as we leave the digit mapping function.
   myDisplay.displayClear();
 }
 
@@ -156,9 +157,9 @@ void testDisplay() {
   myDisplay.displayClear();
   for(counter = 0; counter < NUMLEDS; counter++) {
     myDisplay.displayLED1(counter, ON);
-    delay(500);
+    delay(250);
     myDisplay.displayLED1(counter, OFF);
-    delay(500);
+    delay(250);
   }
   // Display brightness test.
   for(brightness = INTENSITY_MIN; brightness <= INTENSITY_MAX; brightness++) {
@@ -171,31 +172,27 @@ void testDisplay() {
   // Clear the display and set the brightness to the typical value.
   myDisplay.displayClear();
   myDisplay.displayBrightness(INTENSITY_TYP);
-  // Display all characters on each digit.
-  for(counter = 0; counter < NUMDIGITS; counter++) {
-    // Cycle through each code in the character table, deliberately exceeding the table size by 1 to finish on a default space (0x00).
-    for(character = 0; character <= myDisplay.charTableSize; character++) {
+  // Cycle through each code in the character table, deliberately exceeding the table size by 1 to finish on a default space (0x00).
+  for(character = 0; character <= myDisplay.charTableSize; character++) {
+    // Display the character on all display digits.
+    for(counter = 0; counter < NUMDIGITS; counter++) {
       myDisplay.displayChar(counter, character);
-      delay(200);
     }
+    delay(500);
   }
-  // Decimal points ON/OFF test.
+  // Decimal points ON/OFF test for each display digit.
   myDisplay.displayClear();
   for(counter = 0; counter < NUMDIGITS; counter++) {
     myDisplay.displayDP(counter, ON);
-    delay(500);
+    delay(250);
     myDisplay.displayDP(counter, OFF);
-    delay(500);
+    delay(250);
   }
-  // ALL LEDs, Segments, and decimal points ON.
-  myDisplay.displayClear();
-  for(counter = 0; counter < max(NUMDIGITS, NUMLEDS); counter++) {
-    myDisplay.displayLED1(counter, ON);
-    myDisplay.displayChar(counter, 0x08);
-    myDisplay.displayDP(counter, ON);
-  }
+  // ALL LEDs, Segments, and decimal points ON, then restored.
+  myDisplay.displayTest(true);
   delay(2000);
-  // Clear the LEDs and display (+dps) as we leave the LED/Digit/Button test function.
+  myDisplay.displayTest(false);
+// Ensure we clear the LEDs and display (+dps) as we leave the display test function.
   myDisplay.displayClear();
 }
 
@@ -211,7 +208,7 @@ void countHex8(uint32_t interval) {
     circle8ss(7, counter);                                // Display two circulating segments in 8th digit.
     delay(interval);
   } while(++counter != 0);                                // The counter is an 8-bit number that will wrap to zero.
-  // Clear the LEDs and display (+dps) as we leave the 8-bit counter function.
+  // Ensure we clear the LEDs and display (+dps) as we leave the 8-bit counter function.
   myDisplay.displayClear();
 }
 
@@ -224,6 +221,8 @@ void countHex12(uint32_t interval) {
     myDisplay.displayInt12(5, counter, false);            // Print the 12-bit count in the 6th, 7th and 8th digits.
     delay(interval);
   } while(++counter != 0x1000);                           // The counter is a 16-bit number, so watch for it crossing the 12-bit boundry.
+  // Ensure we clear the LEDs and display (+dps) as we leave the 12-bit counter function.
+  myDisplay.displayClear();
 }
 
 void countHex16(uint32_t interval) {
@@ -233,6 +232,8 @@ void countHex16(uint32_t interval) {
     myDisplay.displayInt16(4, counter, false);            // Print the 16-bit count in the 5th, 6th, 7th and 8th digits.
     delay(interval);
   } while(++counter != 0);                                // The counter is a 16-bit number that will wrap to zero.
+  // Ensure we clear the LEDs and display (+dps) as we leave the 16-bit counter function.
+  myDisplay.displayClear();
 }
 
 void countUp(uint16_t number, uint32_t interval) {
@@ -242,6 +243,8 @@ void countUp(uint16_t number, uint32_t interval) {
     myDisplay.displayInt16(4, counter);                   // Print the 0 - 9999 count in the 5th, 6th, 7th and 8th digits.
     delay(interval);
   }
+  // Ensure we clear the LEDs and display (+dps) as we leave the count up function.
+  myDisplay.displayClear();
 }
 
 void countDown(uint16_t number, uint32_t interval) {
@@ -251,6 +254,8 @@ void countDown(uint16_t number, uint32_t interval) {
     myDisplay.displayInt16(4, counter);                   // Print the 9999 - 0 count in the 5th, 6th, 7th and 8th digits.
     delay(interval);
   }
+  // Ensure we clear the LEDs and display (+dps) as we leave the count down function.
+  myDisplay.displayClear();
 }
 
 void countXMins(byte minutesMax) {
@@ -271,6 +276,8 @@ void countXMins(byte minutesMax) {
       delay(1000);
     }
   }
+  // Ensure we clear the display (+dps) as we leave the timer function.
+  myDisplay.displayClear();
 }
 
 void countXMinsDP(byte minutesMax) {
@@ -307,6 +314,8 @@ void countXMinsDP(byte minutesMax) {
       dPoint = !dPoint;
     }
   };
+  // Ensure we clear the display (+dps) as we leave the timer function.
+  myDisplay.displayClear();
 }
 
 void buttonMonitor() {
@@ -318,10 +327,12 @@ void buttonMonitor() {
     myDisplay.displayLED8(buttons, true);                 // Display the 00000000 - 11111111 button value to the LEDs.
     delay(10);
   };
+  // Ensure we clear the display (+dps) as we leave the button monitor function.
   myDisplay.displayClear();
 }
 
 // Display a circulating segment in a digit - a b g e d c g f
+// a = 0x01, b = 0x02, c = 0x04, d = 0x08, e = 0x10, f = 0x20, g = 0x40
 void circle8s(byte digit, byte number) {
   byte circleSegments[] = {0x01, 0x02, 0x40, 0x10, 0x08, 0x04, 0x40, 0x20};
   // Ensure we have a number 0 - 7, and raw print that segment bitmap on the selected display digit.

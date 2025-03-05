@@ -9,6 +9,8 @@
  * GPL(v3) Licence
  *
  * Built on my TM1637 library, and work by Gavin Lyons and Handson Technology.
+ * ... with some developments backported into this library from my MAX7219 library.
+ *
  * References:
  *    https://github.com/gavinlyonsrepo/TM1638plus
  *    https://www.handsontec.com/dataspecs/display/TM1638.pdf
@@ -39,8 +41,8 @@
   #define __TM1638_H
   #include <Arduino.h>
 
-  #define ON          HIGH
-  #define OFF         LOW
+  #define ON              HIGH
+  #define OFF             LOW
   
   // Command and address definitions for the TM1638.
   #define ADDR_AUTO       0x40
@@ -53,7 +55,7 @@
   // The decimal points are controlled via bit 7 of each display digit.
   #define DP_CTRL         0x80
 
-  // Definitions for the 7 segment display brightness.
+  // Definitions for the 7-segment display brightness.
   #define INTENSITY_MIN   0x00
   #define INTENSITY_TYP   0x02
   #define INTENSITY_MAX   0x07
@@ -82,7 +84,8 @@
       void begin(uint8_t*, uint8_t = DEF_BUTTONS, uint8_t = DEF_LEDS, uint8_t = DEF_DIGITS, uint8_t = INTENSITY_TYP);
       void displayOff(void);                              // Turn the TM1638 display OFF.
       void displayClear(void);                            // Clear all the LEDs and digits (+dps) in the display.
-      void displayBrightness(uint8_t = INTENSITY_TYP);    // Set the brightness and turn the TM1638 display ON.
+      void displayBrightness(uint8_t = INTENSITY_TYP);    // Set the brightness (0x00 - 0x07) and turn the TM1638 display ON.
+      void displayTest(bool = false);                     // Test the display - all the display LEDs and digit segments (+dps).
       void displayBin8(uint8_t, bool = false);            // Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB.
       void displayChar(uint8_t, uint8_t, bool = false);   // Display a character in a specific digit.
       void displayInt8(uint8_t, uint8_t, bool = true);    // Display a decimal integer between 0 - 99, or a hex integer between 0x00 - 0xff, starting at a specific digit.
@@ -108,8 +111,8 @@
       void writeDigit(uint8_t, bool = false);             // Write the given logical digit value to the correct physical digit.
       uint8_t readByte(void);                             // Read a byte of data from the TM1638.
       void writeByte(uint8_t);                            // Write a byte of data to the TM1638.
-      void start(void);                                   // Send start signal to the TM1638.
-      void stop(void);                                    // Send stop signal to the TM1638.
+      void start(void);                                   // Send a start signal to the TM1638.
+      void stop(void);                                    // Send a stop signal to the TM1638.
   };
 #endif
 

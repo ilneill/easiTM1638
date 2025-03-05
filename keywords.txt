@@ -14,6 +14,7 @@ begin KEYWORD2
 displayOff KEYWORD2
 displayClear KEYWORD2
 displayBrightness KEYWORD2
+displayTest KEYWORD2
 displayBin8 KEYWORD2
 displayChar KEYWORD2
 displayInt8	KEYWORD2

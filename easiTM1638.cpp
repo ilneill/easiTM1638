@@ -9,6 +9,8 @@
  * GPL(v3) Licence
  *
  * Built on my TM1637 library, and work by Gavin Lyons and Handson Technology.
+ * ... with some developments backported into this library from my MAX7219 library.
+ *
  * References:
  *    https://github.com/gavinlyonsrepo/TM1638plus
  *    https://www.handsontec.com/dataspecs/display/TM1638.pdf
@@ -42,7 +44,7 @@ uint8_t TM1638::tmCharTable[] = {0x3f, 0x06, 0x5b, 0x4f, 0x66, 0x6d, 0x7d, 0x07,
                                  0x77, 0x7c, 0x39, 0x5e, 0x79, 0x71,                         // Numbers : A, b, C, d, E, F.
                                  0x58, 0x6f, 0x74, 0x76, 0x10, 0x30, 0x1e, 0x38,             // Chars1  : c, g, h, H, i, I, J, L.
                                  0x54, 0x37, 0x73, 0x50, 0x78, 0x1c, 0x3e, 0x6e,             // Chars2  : n, N, P, r, t, u, U, y.
-                                 0x00,                                                       // Blank   : Space = index 32. 
+                                 0x00,                                                       // Blank   : Space = index 32 (0x20). 
                                  0x01, 0x40, 0x08, 0x63, 0x5c, 0x46, 0x70,                   // Specials: uDash, mDash, lDash, uBox, lBox, lBorder, rBorder.
                                  0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40};                  // Segments: SegA, SegB, SegC, SegD, SegE, SegF, SegG.
 
@@ -106,7 +108,7 @@ void TM1638::displayOff(void) {
 // Clear all the LEDs and digits (+dps) in the display.
 void TM1638::displayClear(void) {
   uint8_t digit;
-  for(digit = 0; digit < _numDigits; digit++){
+  for(digit = 0; digit < _numDigits; digit++) {
     this->displayLED1(digit, false);                      // Turn OFF all the TM1638 module LEDs.
     this->displayChar(digit, 0x00, true);                 // Write a zero (all segments OFF) to each digit.
     this->displayDP(digit, false);                        // Turn OFF all the decimal points.
@@ -118,6 +120,29 @@ void TM1638::displayBrightness(uint8_t brightness) {
   _brightness = brightness & INTENSITY_MAX;               // Record the TM1638 brightness level.
   cmdDispCtrl = DISP_ON + _brightness;                    // 88 + 0 to 7 brightness, 88 = display ON.
   this->writeCommand(cmdDispCtrl);                        // Set the brightness and turn the display ON.
+}
+
+// Test the display - all the display LEDs and digit segments (+dps).
+void TM1638::displayTest(bool dispTest) {
+  uint8_t digit;
+  this->writeCommand(ADDR_AUTO);                          // Cmd to set auto incrementing address mode.
+  this->start();                                          // Send the start signal to the TM1638.
+  this->writeByte(STARTADDR);                             // Set the address to the first digit.
+  if(dispTest) {
+    // Turn ON all the LEDs, and all digit segments (+dps).
+    for(digit = 0; digit < max(_numDigits, _numLEDs); digit++) {
+      this->writeByte(0xff);                              // Direct write to turn all digit segments (+dps) ON.
+      this->writeByte(0x01);                              // Direct write to turn the LED ON.
+    }
+  }
+  else {
+    // Restore all the LEDs, and all digit segments (+dps) to their previous values.
+    for(digit = 0; digit < max(_numDigits, _numLEDs); digit++) {
+      this->writeByte( _registers[digit]);                // Restore the digit segments (+dps) to what they were.
+      this->writeByte((_allLEDs >> digit) & 0x01);        // Restore the LED to what it was.
+    }
+  }
+  this->stop();                                           // Send the stop signal to the TM1638.
 }
 
 // Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB.
@@ -132,7 +157,7 @@ void TM1638::displayBin8(uint8_t number, bool lsbFirst) {
         _registers[digit] = (_registers[7 - digit] & DP_CTRL) | (tmCharTable[(number >> (7 - digit)) & 0x01] & 0x7f);
       }
       this->writeCommand(ADDR_FIXED);                     // Cmd to set specific address mode.
-      this->writeDigit(digit);                            // Write the first digit of the 8-bit number.
+      this->writeDigit(digit);                            // Write the digit of the 8-bit number to the display.
     }
   }
 }
@@ -275,7 +300,7 @@ uint8_t TM1638::readButtons(void) {
     pinMode(_dataPin, INPUT);                             // Set the data pin to be an input.
     for (counter = 0; counter < 4; counter++) {           // Read in 4 bytes of data.
       buttons |= (this->readByte() << counter);           // Get the byte and shift b0 and b4 to the left as appropriate,
-                                                          //  and merge the button bits into a single byte.
+                                                          //   and merge the button bits into a single byte.
     }
     pinMode(_dataPin, OUTPUT);                            // Set the data pin back to an output.
     this->stop();                                         // Send the stop signal to the TM1638.

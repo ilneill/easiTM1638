@@ -77,6 +77,9 @@ __void displayClear(void);__
 __void displayBrightness(uint8_t brightness = 2);__
 * Set the brightness (0x00 - 0x07) and turn the TM1638 display ON. Returns nothing.
 
+__void displayTest(bool dispTest = false);__
+* Turn ON/OFF Display Test mode. True turns ON all LEDs and digit segments (+dps). False restores their previous values. Returns nothing.
+
 __void displayBin8(uint8_t number, bool lsbFirst = false);__
 * Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB. Returns nothing.
 
