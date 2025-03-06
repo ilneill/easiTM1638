@@ -30,7 +30,7 @@ So far, the "LED&KEY" TM1638 based module has easily been my favourite, and I am
 
 ## Library Features
 
-This library uses Arduino shiftIn/shiftOut functions for the serial communication protocol and implements several higher functions built on one that simply write bytes to the TM1638 device.
+This library uses Arduino shiftIn/shiftOut functions for the serial communication protocol and implements several higher functions built on one that simply writes bytes to the TM1638 device.
 
 * Supports 7-Segment LED displays of up to 8 digits (+dps) using the TM1638.
 * Supports up to 8 LEDs and 8 buttons, as found on the "LED&KEY" TM1638 based module.
@@ -65,7 +65,7 @@ __TM1638(uint8_t stbPin = 4, uint8_t clkPin = 2, uint8_t dataPin = 3);__
 __void begin(uint8_t numButtons = 8, uint8_t numLEDs = 8, uint8_t numDigits = 0, uint8_t brightness = 2);__
 * Set up the display and initialise it with starting values. The default DigitMap is assumed. Returns nothing.
 
-__void begin(uint8_t* tmDigitMap, uint8_t numLEDs = 8, uint8_t numDigits = 0, uint8_t brightness = 2);__
+__void begin(uint8_t* tmDigitMap, uint8_t numButtons = 8, uint8_t numLEDs = 8, uint8_t numDigits = 0, uint8_t brightness = 2);__
 * Set up the display and initialise it with starting values. The passed DigitMap is used. Returns nothing.
 
 __void displayOff(void);__
