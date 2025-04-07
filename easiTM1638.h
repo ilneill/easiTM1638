@@ -45,46 +45,46 @@
   #define OFF             LOW
   
   // Command and address definitions for the TM1638.
-  #define ADDR_AUTO       0x40
-  #define READ_KEYS       0x42
-  #define ADDR_FIXED      0x44
-  #define DISP_OFF        0x80
-  #define DISP_ON         0x88
-  #define STARTADDR       0xc0 
+  #define ADDR_AUTO38     0x40
+  #define READ_KEYS38     0x42
+  #define ADDR_FIXED38    0x44
+  #define DISP_OFF38      0x80
+  #define DISP_ON38       0x88
+  #define STARTADDR38     0xc0 
 
   // The decimal points are controlled via bit 7 of each display digit.
-  #define DP_CTRL         0x80
+  #define DP_CTRL38       0x80
 
   // Definitions for the 7-segment display brightness.
-  #define INTENSITY_MIN   0x00
-  #define INTENSITY_TYP   0x02
-  #define INTENSITY_MAX   0x07
+  #define INTENSITY_MIN38 0x00
+  #define INTENSITY_TYP38 0x02
+  #define INTENSITY_MAX38 0x07
 
   // Hardware related definitions.
-  #define DEF_TM_CLK      2
-  #define DEF_TM_DIN      3
-  #define DEF_TM_STB      4
-  #define DEF_LEDS        8
-  #define MAX_LEDS        8
-  #define DEF_DIGITS      8
-  #define MAX_DIGITS      8
-  #define DEF_BUTTONS     8
-  #define MAX_BUTTONS     8
+  #define DEF_TM_CLK38    2
+  #define DEF_TM_DIN38    3
+  #define DEF_TM_STB38    4
+  #define DEF_LEDS38      8
+  #define MAX_LEDS38      8
+  #define DEF_DIGITS38    8
+  #define MAX_DIGITS38    8
+  #define DEF_BUTTONS38   8
+  #define MAX_BUTTONS38   8
 
   class TM1638 {
     public:
       // TM1638 Class instantiation.
-      TM1638(uint8_t = DEF_TM_STB, uint8_t = DEF_TM_CLK, uint8_t = DEF_TM_DIN);
+      TM1638(uint8_t = DEF_TM_STB38, uint8_t = DEF_TM_CLK38, uint8_t = DEF_TM_DIN38);
       uint8_t cmdDispCtrl;                                // The current display control command.
       uint8_t charTableSize;                              // The size of the defined character code table.
       static uint8_t tmCharTable[];                       // This is a class variable, shared across all class instances.
       // Set up the display and initialise it with defaults values - with the default digit map.
-      void begin(uint8_t = DEF_BUTTONS, uint8_t = DEF_LEDS, uint8_t = DEF_DIGITS, uint8_t = INTENSITY_TYP);
+      void begin(uint8_t = DEF_BUTTONS38, uint8_t = DEF_LEDS38, uint8_t = DEF_DIGITS38, uint8_t = INTENSITY_TYP38);
       // Set up the display and initialise it with defaults values - with a supplied digit map.
-      void begin(uint8_t*, uint8_t = DEF_BUTTONS, uint8_t = DEF_LEDS, uint8_t = DEF_DIGITS, uint8_t = INTENSITY_TYP);
+      void begin(uint8_t*, uint8_t = DEF_BUTTONS38, uint8_t = DEF_LEDS38, uint8_t = DEF_DIGITS38, uint8_t = INTENSITY_TYP38);
       void displayOff(void);                              // Turn the TM1638 display OFF.
       void displayClear(void);                            // Clear all the LEDs and digits (+dps) in the display.
-      void displayBrightness(uint8_t = INTENSITY_TYP);    // Set the brightness (0x00 - 0x07) and turn the TM1638 display ON.
+      void displayBrightness(uint8_t = INTENSITY_TYP38);  // Set the brightness (0x00 - 0x07) and turn the TM1638 display ON.
       void displayTest(bool = false);                     // Test the display - all the display LEDs and digit segments (+dps).
       void displayBin8(uint8_t, bool = false);            // Display a binary integer between 0b00000000 - 0b11111111, starting at digit 0 for the LSB or MSB.
       void displayChar(uint8_t, uint8_t, bool = false);   // Display a character in a specific digit.
@@ -104,7 +104,7 @@
       uint8_t _numButtons;                                // The number of TM1638 module buttons.
       uint8_t _brightness;                                // The current TM1638 display brightness.
       uint8_t _allLEDs = 0;                               // A byte used to hold the TM1638 module LED values.
-      uint8_t _registers[MAX_DIGITS] = {0};               // An array used to hold the TM1638 display digit values.
+      uint8_t _registers[MAX_DIGITS38] = {0};             // An array used to hold the TM1638 display digit values.
       uint8_t* _tmDigitMap;                               // A pointer to the physical to logical digit mapping.
       static uint8_t tmDigitMapDefault[];                 // An array to hold the default physical to logical digit mapping.
       void writeCommand(uint8_t);                         // Write a command to the TM1638.

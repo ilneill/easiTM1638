@@ -50,10 +50,10 @@ void setup() {
   Serial.begin(9600);
   // TM1638 fixed addressing mode using the default digit map.
   // Buttons = 8, LEDs = 8, Digits = 8, Brightness = 2, Display cleared (all LEDs OFF, segments OFF, and decimal points OFF).
-  myDisplay.begin(NUMBUTTONS, NUMLEDS, NUMDIGITS, INTENSITY_TYP);
+  myDisplay.begin(NUMBUTTONS, NUMLEDS, NUMDIGITS, INTENSITY_TYP38);
   // TM1638 fixed addressing mode using a supplied digit map.
   // Buttons = 8, LEDs = 8, Digits = 8, Brightness = 2, Display cleared (all LEDs OFF, segments OFF, and decimal points OFF).
-  //myDisplay.begin(tmDigitMap, NUMBUTTONS, NUMLEDS, NUMDIGITS, INTENSITY_TYP);
+  //myDisplay.begin(tmDigitMap, NUMBUTTONS, NUMLEDS, NUMDIGITS, INTENSITY_TYP38);
   Serial.println(FLASHSTR("\nDisplay physical to logical mapping test."));
   findDigitMap();
   Serial.println(FLASHSTR("\nDisplay brightness and LED/digit/button tests."));
@@ -162,7 +162,7 @@ void testDisplay() {
     delay(250);
   }
   // Display brightness test.
-  for(brightness = INTENSITY_MIN; brightness <= INTENSITY_MAX; brightness++) {
+  for(brightness = INTENSITY_MIN38; brightness <= INTENSITY_MAX38; brightness++) {
     myDisplay.displayBrightness(brightness);
     for(counter = 0; counter < NUMDIGITS; counter++) {
       myDisplay.displayChar(counter, brightness);
@@ -171,7 +171,7 @@ void testDisplay() {
   }
   // Clear the display and set the brightness to the typical value.
   myDisplay.displayClear();
-  myDisplay.displayBrightness(INTENSITY_TYP);
+  myDisplay.displayBrightness(INTENSITY_TYP38);
   // Cycle through each code in the character table, deliberately exceeding the table size by 1 to finish on a default space (0x00).
   for(character = 0; character <= myDisplay.charTableSize; character++) {
     // Display the character on all display digits.
@@ -180,7 +180,7 @@ void testDisplay() {
     }
     delay(500);
   }
-  // Decimal points ON/OFF test for each display digit.
+  // Decimal point ON/OFF test for each display digit.
   myDisplay.displayClear();
   for(counter = 0; counter < NUMDIGITS; counter++) {
     myDisplay.displayDP(counter, ON);
@@ -188,11 +188,11 @@ void testDisplay() {
     myDisplay.displayDP(counter, OFF);
     delay(250);
   }
-  // ALL LEDs, Segments, and decimal points ON, then restored.
+  // All LEDs, segments, and decimal points ON, then restored.
   myDisplay.displayTest(true);
   delay(2000);
   myDisplay.displayTest(false);
-// Ensure we clear the LEDs and display (+dps) as we leave the display test function.
+  // Ensure we clear the LEDs and display (+dps) as we leave the display test function.
   myDisplay.displayClear();
 }
 
@@ -276,7 +276,7 @@ void countXMins(byte minutesMax) {
       delay(1000);
     }
   }
-  // Ensure we clear the display (+dps) as we leave the timer function.
+  // Ensure we clear the LEDs and display (+dps) as we leave the timer function.
   myDisplay.displayClear();
 }
 
@@ -314,7 +314,7 @@ void countXMinsDP(byte minutesMax) {
       dPoint = !dPoint;
     }
   };
-  // Ensure we clear the display (+dps) as we leave the timer function.
+  // Ensure we clear the LEDs and display (+dps) as we leave the timer function.
   myDisplay.displayClear();
 }
 
@@ -327,7 +327,7 @@ void buttonMonitor() {
     myDisplay.displayLED8(buttons, true);                 // Display the 00000000 - 11111111 button value to the LEDs.
     delay(10);
   };
-  // Ensure we clear the display (+dps) as we leave the button monitor function.
+  // Ensure we clear the LEDs and display (+dps) as we leave the button monitor function.
   myDisplay.displayClear();
 }
 

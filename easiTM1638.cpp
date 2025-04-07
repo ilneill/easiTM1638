@@ -74,19 +74,19 @@ void TM1638::begin(uint8_t numButtons, uint8_t numLEDs, uint8_t numDigits, uint8
 // Set up the display and initialise it with defaults values - with a supplied digit map.
 void TM1638::begin(uint8_t* tmDigitMap, uint8_t numButtons, uint8_t numLEDs, uint8_t numDigits, uint8_t brightness) {
   _tmDigitMap = tmDigitMap;
-  if(numLEDs > 0 && numLEDs <= MAX_LEDS) {                // The TM1638 module supports up to 8 LEDs.
+  if(numLEDs > 0 && numLEDs <= MAX_LEDS38) {              // The TM1638 module supports up to 8 LEDs.
     _numLEDs = numLEDs;
   }
   else {
     _numLEDs = 0;                                         // We have no TM1638 module LEDs.
   }
-  if(numDigits > 0 && numDigits <= MAX_DIGITS) {          // The TM1638 module supports up to 8 digits.
+  if(numDigits > 0 && numDigits <= MAX_DIGITS38) {        // The TM1638 module supports up to 8 digits.
     _numDigits = numDigits;
   }
   else {
     _numDigits = 1;                                       // We have only one TM1638 module digit.
   }
-  if(numButtons > 0 && numButtons <= MAX_BUTTONS) {       // The TM1638 module supports up to 8 buttons.
+  if(numButtons > 0 && numButtons <= MAX_BUTTONS38) {     // The TM1638 module supports up to 8 buttons.
     _numButtons = numButtons;
   }
   else {
@@ -101,7 +101,7 @@ void TM1638::begin(uint8_t* tmDigitMap, uint8_t numButtons, uint8_t numLEDs, uin
 
 // Turn the TM1638 display OFF.
 void TM1638::displayOff(void) {
-  cmdDispCtrl = DISP_OFF;                                 // 0x80 = display OFF.
+  cmdDispCtrl = DISP_OFF38;                               // 0x80 = display OFF.
   this->writeCommand(cmdDispCtrl);                        // Turn the display OFF.
 }
 
@@ -117,17 +117,17 @@ void TM1638::displayClear(void) {
 
 // Set the brightness (0x00 - 0x07) and turn the TM1638 display ON.
 void TM1638::displayBrightness(uint8_t brightness) {
-  _brightness = brightness & INTENSITY_MAX;               // Record the TM1638 brightness level.
-  cmdDispCtrl = DISP_ON + _brightness;                    // 88 + 0 to 7 brightness, 88 = display ON.
+  _brightness = brightness & INTENSITY_MAX38;             // Record the TM1638 brightness level.
+  cmdDispCtrl = DISP_ON38 + _brightness;                  // 88 + 0 to 7 brightness, 88 = display ON.
   this->writeCommand(cmdDispCtrl);                        // Set the brightness and turn the display ON.
 }
 
 // Test the display - all the display LEDs and digit segments (+dps).
 void TM1638::displayTest(bool dispTest) {
   uint8_t digit;
-  this->writeCommand(ADDR_AUTO);                          // Cmd to set auto incrementing address mode.
+  this->writeCommand(ADDR_AUTO38);                        // Cmd to set auto incrementing address mode.
   this->start();                                          // Send the start signal to the TM1638.
-  this->writeByte(STARTADDR);                             // Set the address to the first digit.
+  this->writeByte(STARTADDR38);                           // Set the address to the first digit.
   if(dispTest) {
     // Turn ON all the LEDs, and all digit segments (+dps).
     for(digit = 0; digit < max(_numDigits, _numLEDs); digit++) {
@@ -151,12 +151,12 @@ void TM1638::displayBin8(uint8_t number, bool lsbFirst) {
   if(_numDigits > 7) {                                    // We need at least 8 digits to display an 8-bit binary number, leftmost digit is #0.
     for(digit = 0; digit < 8; digit++) {
       if(lsbFirst) {
-        _registers[digit] = (_registers[digit] & DP_CTRL) | (tmCharTable[(number >> digit) & 0x01] & 0x7f);
+        _registers[digit] = (_registers[digit] & DP_CTRL38) | (tmCharTable[(number >> digit) & 0x01] & 0x7f);
       }
       else {
-        _registers[digit] = (_registers[7 - digit] & DP_CTRL) | (tmCharTable[(number >> (7 - digit)) & 0x01] & 0x7f);
+        _registers[digit] = (_registers[7 - digit] & DP_CTRL38) | (tmCharTable[(number >> (7 - digit)) & 0x01] & 0x7f);
       }
-      this->writeCommand(ADDR_FIXED);                     // Cmd to set specific address mode.
+      this->writeCommand(ADDR_FIXED38);                   // Cmd to set specific address mode.
       this->writeDigit(digit);                            // Write the digit of the 8-bit number to the display.
     }
   }
@@ -167,17 +167,17 @@ void TM1638::displayChar(uint8_t digit, uint8_t number, bool raw) {
   if(digit < _numDigits) {                                // Boundry check the digit number, leftmost digit is #0.
     if(raw) {                                             // If this is a raw segment bit number, ensure there are only 7 bits.
       number &= 0x7f;
-      number |= (_registers[digit] & DP_CTRL);            // Merge the segment number with the dp (bit 7) status.
+      number |= (_registers[digit] & DP_CTRL38);          // Merge the segment number with the dp (bit 7) status.
     }
     else {                                                // If using the character table, ensure the number is within the character table.
       if(number >= charTableSize) {
         number = 0x20;                                    // This is a 0x00 (space) in the character table.
       }
       number = tmCharTable[number];                       // Get the raw number from the character table.
-      number |= (_registers[digit] & DP_CTRL);            // Merge the segment number with the dp (bit 7) status.
+      number |= (_registers[digit] & DP_CTRL38);          // Merge the segment number with the dp (bit 7) status.
     }
     _registers[digit] = number;                           // Record the latest value for this LED digit.
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the character digit to the display.
   }
 }
@@ -189,14 +189,14 @@ void TM1638::displayInt8(uint8_t digit, uint8_t number, bool useDec) {
       if(number > 99) {                                   // Clip the number at the maximum for a 2 digit decimal number.
         number = 99;
       }
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 10) % 10] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[ number       % 10] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 10) % 10] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[ number       % 10] & 0x7f);
     }
     else {
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 16) % 16] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[ number       % 16] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 16) % 16] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[ number       % 16] & 0x7f);
     }
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the first digit of the 8-bit number.
     this->writeDigit(digit + 1);                          // Write the second digit of the 8-bit number.
   }
@@ -209,19 +209,19 @@ void TM1638::displayInt12(uint8_t digit, uint16_t number, bool useDec) {
       if(number > 999) {                                  // Clip the number at the maximum for a 3 digit decimal number.
         number = 999;
       }
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 100) % 10] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[(number /  10) % 10] & 0x7f);
-      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL) | (tmCharTable[ number        % 10] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 100) % 10] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[(number /  10) % 10] & 0x7f);
+      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL38) | (tmCharTable[ number        % 10] & 0x7f);
     }
     else {
       if(number > 0xfff) {                                // Clip the number at the maximum for a 3 digit hexadecimal number.
         number = 0xfff;
       }
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 256) % 16] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[(number /  16) % 16] & 0x7f);
-      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL) | (tmCharTable[ number        % 16] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 256) % 16] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[(number /  16) % 16] & 0x7f);
+      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL38) | (tmCharTable[ number        % 16] & 0x7f);
     }
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the first digit of the 12-bit number.
     this->writeDigit(digit + 1);                          // Write the second digit of the 12-bit number.
     this->writeDigit(digit + 2);                          // Write the third digit of the 12-bit number.
@@ -235,18 +235,18 @@ void TM1638::displayInt16(uint8_t digit, uint16_t number, bool useDec) {
       if(number > 9999) {                                 // Clip the number at the maximum for a 4 digit decimal number.
         number = 9999;
       }
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 1000) % 10] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[(number /  100) % 10] & 0x7f);
-      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL) | (tmCharTable[(number /   10) % 10] & 0x7f);
-      _registers[digit + 3] = (_registers[digit + 3] & DP_CTRL) | (tmCharTable[ number         % 10] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 1000) % 10] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[(number /  100) % 10] & 0x7f);
+      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL38) | (tmCharTable[(number /   10) % 10] & 0x7f);
+      _registers[digit + 3] = (_registers[digit + 3] & DP_CTRL38) | (tmCharTable[ number         % 10] & 0x7f);
     }
     else {
-      _registers[digit]     = (_registers[digit]     & DP_CTRL) | (tmCharTable[(number / 4096) % 16] & 0x7f);
-      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL) | (tmCharTable[(number /  256) % 16] & 0x7f);
-      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL) | (tmCharTable[(number /   16) % 16] & 0x7f);
-      _registers[digit + 3] = (_registers[digit + 3] & DP_CTRL) | (tmCharTable[ number         % 16] & 0x7f);
+      _registers[digit]     = (_registers[digit]     & DP_CTRL38) | (tmCharTable[(number / 4096) % 16] & 0x7f);
+      _registers[digit + 1] = (_registers[digit + 1] & DP_CTRL38) | (tmCharTable[(number /  256) % 16] & 0x7f);
+      _registers[digit + 2] = (_registers[digit + 2] & DP_CTRL38) | (tmCharTable[(number /   16) % 16] & 0x7f);
+      _registers[digit + 3] = (_registers[digit + 3] & DP_CTRL38) | (tmCharTable[ number         % 16] & 0x7f);
     }
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the first digit of the 16-bit number.
     this->writeDigit(digit + 1);                          // Write the second digit of the 16-bit number.
     this->writeDigit(digit + 2);                          // Write the third digit of the 16-bit number.
@@ -276,7 +276,7 @@ void TM1638::displayLED1(uint8_t digit, bool status) {
   // Boundry check the digit number, leftmost digit is #0.
   if(_numLEDs > 0 && digit < _numLEDs) {
     bitWrite(_allLEDs, digit, status);
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit, true);                        // Write the status to the specified LED.
   }
 }
@@ -286,7 +286,7 @@ void TM1638::displayDP(uint8_t digit, bool status) {
   // Boundry check the digit number, leftmost digit is #0.
   if(digit < _numDigits) {
     bitWrite(_registers[digit], 7, status);
-    this->writeCommand(ADDR_FIXED);                       // Cmd to set specific address mode.
+    this->writeCommand(ADDR_FIXED38);                     // Cmd to set specific address mode.
     this->writeDigit(digit);                              // Write the digit decimal point to the display.
   }
 }
@@ -296,7 +296,7 @@ uint8_t TM1638::readButtons(void) {
 	uint8_t counter, buttons = 0;
   if(_numButtons > 0) {
     this->start();                                        // Send the start signal to the TM1638.
-    this->writeByte(READ_KEYS);                           // Cmd to set key scan mode.
+    this->writeByte(READ_KEYS38);                         // Cmd to set key scan mode.
     pinMode(_dataPin, INPUT);                             // Set the data pin to be an input.
     for (counter = 0; counter < 4; counter++) {           // Read in 4 bytes of data.
       buttons |= (this->readByte() << counter);           // Get the byte and shift b0 and b4 to the left as appropriate,
@@ -325,12 +325,12 @@ void TM1638::writeDigit(uint8_t digit, bool LED) {
   this->start();                                          // Send the start signal to the TM1638.
   if(LED) {
     // Set the address for the requested digit and write the number to the display digit.
-    this->writeByte(STARTADDR + (_tmDigitMap[digit] << 1) + 1);
+    this->writeByte(STARTADDR38 + (_tmDigitMap[digit] << 1) + 1);
     this->writeByte((_allLEDs >> digit) & 0x01);
   }
   else {
     // Set the address for the requested digit and write the number to the display digit.
-    this->writeByte(STARTADDR + (_tmDigitMap[digit] << 1));
+    this->writeByte(STARTADDR38 + (_tmDigitMap[digit] << 1));
     this->writeByte(_registers[digit]);
   }
   this->stop();                                           // Send the stop signal to the TM1638.
