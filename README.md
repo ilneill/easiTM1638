@@ -101,7 +101,7 @@ __void displayLED8(uint8_t number, bool lsbFirst = false);__
 __void displayLED1(uint8_t digit, bool status = OFF);__
 * Turn ON/OFF the LED at a specific position, 0 -> 7 : Left -> Right. Returns nothing.
 
-__void displayDP(uint8_t digit, bool status = false);__
+__void displayDP(uint8_t digit, bool status = OFF);__
 * Turn ON/OFF the decimal point for the specified digit. Returns nothing.
 
 __uint8_t readButtons(void);__
